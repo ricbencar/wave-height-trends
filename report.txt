@@ -1,0 +1,158 @@
+==============================================
+Wave Height Analysis Report (1940 - 2019)
+==============================================
+
+Introduction:
+  This report provides an in-depth analysis of significant wave heights (SWH) measured from 1940 to 2019. The analysis minimizes methodological biases by:
+    - Removing seasonal effects using monthly average subtraction.
+    - Adjusting trend tests for lag-1 autocorrelation (Modified Mann-Kendall Test).
+    - Employing Sen's slope for robust trend estimation.
+    - Outlining a Seasonal Mann-Kendall Test framework to assess month-specific trends.
+    - Grouping data into full decades only (each with 10 complete years) to ensure consistent comparisons.
+    - Ranking full decades from highest to lowest average deseasonalized SWH.
+
+Data Processing Steps:
+  1) Data Reading and Parsing:
+       - 'input.csv' is read line by line; each valid row is parsed to extract the date/time and SWH.
+       - Invalid or incomplete rows are discarded.
+  2) Chronological Ordering:
+       - The data are sorted in ascending order by year and month to form a coherent time series.
+  3) Seasonality Removal:
+       - For each calendar month, the average SWH is computed across all years.
+       - Each measurement is adjusted by subtracting its monthly mean, resulting in a deseasonalized series.
+  4) Decade Grouping:
+       - Only full decades from 1940 to 2019 are included.
+
+Statistical Analysis:
+  A) One-Way ANOVA:
+       - Purpose: To determine if the mean deseasonalized SWH differs significantly among full decades.
+       - The program computes between-decade (SSB) and within-decade (SSW) variances and calculates an F-statistic.
+       - A rough threshold of F > 2 is used; if exceeded, a Tukey HSD post-hoc test is applied to pinpoint
+         which decades differ.
+
+Basic Statistics per Full Decade:
+  1940s: Count = 87672, Mean = -0.134832, Standard Deviation = 0.888916
+  1950s: Count = 87648, Mean = -0.00361679, Standard Deviation = 0.923972
+  1960s: Count = 87672, Mean = -0.0207253, Standard Deviation = 0.89266
+  1970s: Count = 87648, Mean = -0.0300768, Standard Deviation = 0.95348
+  1980s: Count = 87672, Mean = -0.0365114, Standard Deviation = 0.924468
+  1990s: Count = 87648, Mean = 0.0803728, Standard Deviation = 0.927634
+  2000s: Count = 87672, Mean = 0.0421453, Standard Deviation = 0.934829
+  2010s: Count = 87648, Mean = 0.108992, Standard Deviation = 0.941007
+
+Ranking of Full Decades by Average Deseasonalized SWH (Highest to Lowest):
+  Rank 1: 2010s with an average SWH of 0.108992
+  Rank 2: 1990s with an average SWH of 0.0803728
+  Rank 3: 2000s with an average SWH of 0.0421453
+  Rank 4: 1950s with an average SWH of -0.00361679
+  Rank 5: 1960s with an average SWH of -0.0207253
+  Rank 6: 1970s with an average SWH of -0.0300768
+  Rank 7: 1980s with an average SWH of -0.0365114
+  Rank 8: 1940s with an average SWH of -0.134832
+
+Sen's Slope Estimate:
+  The robust Sen's slope for the deseasonalized series is: 0.076278 units per year.
+
+B) Mann-Kendall Trend Test (Modified for Autocorrelation):
+Autocorrelation adjustment: lag-1 r = 0.92444, variance factor = 25.469
+Mann-Kendall Trend Test (Modified):
+  Total pairs: 277607495628
+  S value: 11722054890
+  Adjusted Variance: 1.17075e+18
+  Z value: 10.8336
+
+Interpretation:
+  - |Z| > 1.96 implies a significant trend at the 5% level.
+  - Positive Z indicates an increasing trend; negative Z indicates a decreasing trend.
+
+C) Seasonal Mann-Kendall Test:
+  [Framework Outline]: In a complete implementation, the deseasonalized data would be
+  divided into 12 monthly series, and the Mann-Kendall test applied to each, with the results
+  combined to assess month-specific trends. This helps confirm that the overall trend is not
+  driven solely by changes in one season.
+
+Seasonal Mann-Kendall Test: [Framework Outline]
+  In a full implementation, data would be split into 12 monthly series, the MK test would be applied
+  to each series, and the results combined to assess month-specific trends. This approach reduces bias
+  due to seasonal variability.
+
+One-Way ANOVA Results:
+One-Way ANOVA:
+  Purpose: To test whether the mean deseasonalized SWH differs among full decades.
+  Total data points: 701280
+  Number of groups (full decades): 8
+  Grand Mean (across all decades): 0.000713203
+  Between-group sum of squares (SSB): 3591.55
+  Within-group sum of squares (SSW): 598218
+  Degrees of freedom between groups (dfB): 7
+  Degrees of freedom within groups (dfW): 701272
+  Mean Square Between (MSB): 513.079
+  Mean Square Within (MSW): 0.853048
+  F-statistic: 601.465
+
+Interpretation of ANOVA:
+  - F < 2 suggests no statistically significant differences among decades.
+  - F > 2 suggests that at least one decade's mean is significantly different.
+  (Exact p-values require an F-distribution lookup; here, F > 2 is used as a rough threshold.)
+
+Since the F-statistic exceeds the threshold, the Tukey HSD post-hoc test is performed
+to determine which specific decades differ significantly.
+
+Tukey HSD Post-hoc Test:
+  Harmonic mean of group sizes: 87660
+  Approximate critical difference: 0.00935852
+
+Pairwise comparisons (difference in means):
+  1940s vs 1950s: difference = 0.131215  --> Significant difference
+  1940s vs 1960s: difference = 0.114107  --> Significant difference
+  1940s vs 1970s: difference = 0.104755  --> Significant difference
+  1940s vs 1980s: difference = 0.0983205  --> Significant difference
+  1940s vs 1990s: difference = 0.215205  --> Significant difference
+  1940s vs 2000s: difference = 0.176977  --> Significant difference
+  1940s vs 2010s: difference = 0.243823  --> Significant difference
+  1950s vs 1960s: difference = 0.0171085  --> Significant difference
+  1950s vs 1970s: difference = 0.02646  --> Significant difference
+  1950s vs 1980s: difference = 0.0328946  --> Significant difference
+  1950s vs 1990s: difference = 0.0839895  --> Significant difference
+  1950s vs 2000s: difference = 0.0457621  --> Significant difference
+  1950s vs 2010s: difference = 0.112608  --> Significant difference
+  1960s vs 1970s: difference = 0.00935151  --> Not significant
+  1960s vs 1980s: difference = 0.0157861  --> Significant difference
+  1960s vs 1990s: difference = 0.101098  --> Significant difference
+  1960s vs 2000s: difference = 0.0628706  --> Significant difference
+  1960s vs 2010s: difference = 0.129717  --> Significant difference
+  1970s vs 1980s: difference = 0.0064346  --> Not significant
+  1970s vs 1990s: difference = 0.11045  --> Significant difference
+  1970s vs 2000s: difference = 0.0722221  --> Significant difference
+  1970s vs 2010s: difference = 0.139068  --> Significant difference
+  1980s vs 1990s: difference = 0.116884  --> Significant difference
+  1980s vs 2000s: difference = 0.0786567  --> Significant difference
+  1980s vs 2010s: difference = 0.145503  --> Significant difference
+  1990s vs 2000s: difference = 0.0382275  --> Significant difference
+  1990s vs 2010s: difference = 0.0286188  --> Significant difference
+  2000s vs 2010s: difference = 0.0668462  --> Significant difference
+
+Final Detailed Conclusions:
+  Based on the comprehensive statistical analyses:
+    - The modified Mann-Kendall test, after adjusting for lag-1 autocorrelation, produced a Z value
+      exceeding 1.96, indicating a statistically significant overall increasing trend in deseasonalized SWH.
+    - Sen's slope, estimated at 0.076278 units per year, robustly quantifies the magnitude
+      of the upward trend.
+    - The One-Way ANOVA test yielded an F-statistic above the rough threshold (F > 2), and the subsequent
+      Tukey HSD post-hoc test identified that later full decades (e.g., 2000s, 2010s) have significantly higher
+      mean deseasonalized SWH than earlier decades (e.g., 1940s, 1950s).
+    - The ranking of full decades confirms the pattern: the most recent complete decades exhibit the highest
+      average deseasonalized wave heights, while the earlier decades show lower values.
+
+Overall, the analysis provides robust and objective evidence that, after removing seasonal effects
+and adjusting for autocorrelation, significant wave heights have increased over time. This conclusion
+is supported by the statistically significant trend detected by the modified Mann-Kendall test, the
+positive trend magnitude indicated by Sen's slope, and the clear differences among full decades as revealed
+by ANOVA and the decade ranking.
+
+IMPORTANT NOTE:
+  Although these statistical methods provide objective evidence of trends and differences, they do not
+  establish causation. Further domain-specific investigation (e.g., changes in measurement techniques,
+  environmental conditions) is required for a comprehensive interpretation of the results.
+
+End of Report.
