@@ -53,7 +53,7 @@ In summary, by carefully preprocessing the data, removing seasonal effects, adju
 g++ -O3 -fopenmp -Wall wave_height_trends.cpp -o wave_height_trends -static -static-libgcc -static-libstdc++
 ```
 
-## Compilation Details (brief):
+## Compilation Details:
 - `-O3`: High-level optimizations.
 - `-fopenmp`: Enable parallel processing with OpenMP.
 - `-Wall`: Enable all warnings.
