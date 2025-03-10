@@ -3,7 +3,7 @@
 ## Overall Description:
 
 This program analyzes long-term trends in significant wave heights (SWH) from a CSV file ("input.csv"). It applies a series of statistical techniques to reduce methodological biases and produces a detailed report ("report.txt").
-![wave-height-trends](https://github.com/user-attachments/assets/969cd7c6-3307-4401-bb9c-118a85da2bed)
+![wave-height-trends](https://github.com/user-attachments/assets/9f8322a2-1a37-42e2-bc74-b4fc6b400a78)
 The key steps include:
 
 1. **CSV Data Reading and Parsing:**
