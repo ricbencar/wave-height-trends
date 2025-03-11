@@ -3,156 +3,385 @@ Wave Height Analysis Report (1940 - 2019)
 ==============================================
 
 Introduction:
-  This report provides an in-depth analysis of significant wave heights (SWH) measured from 1940 to 2019. The analysis minimizes methodological biases by:
-    - Removing seasonal effects using monthly average subtraction.
-    - Adjusting trend tests for lag-1 autocorrelation (Modified Mann-Kendall Test).
-    - Employing Sen's slope for robust trend estimation.
-    - Outlining a Seasonal Mann-Kendall Test framework to assess month-specific trends.
-    - Grouping data into full decades only (each with 10 complete years) to ensure consistent comparisons.
-    - Ranking full decades from highest to lowest average deseasonalized SWH.
+This report provides an in-depth analysis of significant wave heights (SWH) measured from 1940 to 2019. The analysis minimizes biases by
+removing seasonal effects, adjusting for autocorrelation, and examining trends both by decade
+and on a month-by-month basis. Detailed statistical tests and comparisons are provided for a robust,
+evidence-based interpretation.
 
-Data Processing Steps:
-  1) Data Reading and Parsing:
-       - 'input.csv' is read line by line; each valid row is parsed to extract the date/time and SWH.
-       - Invalid or incomplete rows are discarded.
-  2) Chronological Ordering:
-       - The data are sorted in ascending order by year and month to form a coherent time series.
-  3) Seasonality Removal:
-       - For each calendar month, the average SWH is computed across all years.
-       - Each measurement is adjusted by subtracting its monthly mean, resulting in a deseasonalized series.
-  4) Decade Grouping:
-       - Only full decades from 1940 to 2019 are included.
-
-Statistical Analysis:
-  A) One-Way ANOVA:
-       - Purpose: To determine if the mean deseasonalized SWH differs significantly among full decades.
-       - The program computes between-decade (SSB) and within-decade (SSW) variances and calculates an F-statistic.
-       - A rough threshold of F > 2 is used; if exceeded, a Tukey HSD post-hoc test is applied to pinpoint
-         which decades differ.
-
+Decadal Analysis
+----------------
 Basic Statistics per Full Decade:
-  1940s: Count = 87672, Mean = -0.134832, Standard Deviation = 0.888916
-  1950s: Count = 87648, Mean = -0.00361679, Standard Deviation = 0.923972
-  1960s: Count = 87672, Mean = -0.0207253, Standard Deviation = 0.89266
-  1970s: Count = 87648, Mean = -0.0300768, Standard Deviation = 0.95348
-  1980s: Count = 87672, Mean = -0.0365114, Standard Deviation = 0.924468
-  1990s: Count = 87648, Mean = 0.0803728, Standard Deviation = 0.927634
-  2000s: Count = 87672, Mean = 0.0421453, Standard Deviation = 0.934829
-  2010s: Count = 87648, Mean = 0.108992, Standard Deviation = 0.941007
+  1940s: Count = 87672, Mean = -0.134832, Std Dev = 0.888916
+  1950s: Count = 87648, Mean = -0.00361679, Std Dev = 0.923972
+  1960s: Count = 87672, Mean = -0.0207253, Std Dev = 0.89266
+  1970s: Count = 87648, Mean = -0.0300768, Std Dev = 0.95348
+  1980s: Count = 87672, Mean = -0.0365114, Std Dev = 0.924468
+  1990s: Count = 87648, Mean = 0.0803728, Std Dev = 0.927634
+  2000s: Count = 87672, Mean = 0.0421453, Std Dev = 0.934829
+  2010s: Count = 87648, Mean = 0.108992, Std Dev = 0.941007
 
-Ranking of Full Decades by Average Deseasonalized SWH (Highest to Lowest):
-  Rank 1: 2010s with an average SWH of 0.108992
-  Rank 2: 1990s with an average SWH of 0.0803728
-  Rank 3: 2000s with an average SWH of 0.0421453
-  Rank 4: 1950s with an average SWH of -0.00361679
-  Rank 5: 1960s with an average SWH of -0.0207253
-  Rank 6: 1970s with an average SWH of -0.0300768
-  Rank 7: 1980s with an average SWH of -0.0365114
-  Rank 8: 1940s with an average SWH of -0.134832
+Ranking of Full Decades (by Average Deseasonalized SWH):
+  Rank 1: 2010s - Average SWH = 0.108992
+  Rank 2: 1990s - Average SWH = 0.0803728
+  Rank 3: 2000s - Average SWH = 0.0421453
+  Rank 4: 1950s - Average SWH = -0.00361679
+  Rank 5: 1960s - Average SWH = -0.0207253
+  Rank 6: 1970s - Average SWH = -0.0300768
+  Rank 7: 1980s - Average SWH = -0.0365114
+  Rank 8: 1940s - Average SWH = -0.134832
 
-Sen's Slope Estimate:
-  The robust Sen's slope for the deseasonalized series is: 0.076278 units per year.
-
-B) Mann-Kendall Trend Test (Modified for Autocorrelation):
+Modified Mann-Kendall Test (Decadal Analysis):
 Autocorrelation adjustment: lag-1 r = 0.92444, variance factor = 25.469
 Mann-Kendall Trend Test (Modified):
   Total pairs: 277607495628
   S value: 11722054890
   Adjusted Variance: 1.17075e+18
   Z value: 10.8336
+(|Z| > 1.96 indicates a significant trend at the 5% level)
 
-Interpretation:
-  - |Z| > 1.96 implies a significant trend at the 5% level.
-  - Positive Z indicates an increasing trend; negative Z indicates a decreasing trend.
+Sen's Slope Estimate (Overall):
+  Sen's slope for the overall deseasonalized series: 0.0750203 units per year
 
-C) Seasonal Mann-Kendall Test:
-  [Framework Outline]: In a complete implementation, the deseasonalized data would be
-  divided into 12 monthly series, and the Mann-Kendall test applied to each, with the results
-  combined to assess month-specific trends. This helps confirm that the overall trend is not
-  driven solely by changes in one season.
-
-Seasonal Mann-Kendall Test: [Framework Outline]
-  In a full implementation, data would be split into 12 monthly series, the MK test would be applied
-  to each series, and the results combined to assess month-specific trends. This approach reduces bias
-  due to seasonal variability.
-
-One-Way ANOVA Results:
-One-Way ANOVA:
-  Purpose: To test whether the mean deseasonalized SWH differs among full decades.
+One-Way ANOVA (Decadal Comparison):
   Total data points: 701280
-  Number of groups (full decades): 8
-  Grand Mean (across all decades): 0.000713203
-  Between-group sum of squares (SSB): 3591.55
-  Within-group sum of squares (SSW): 598218
-  Degrees of freedom between groups (dfB): 7
-  Degrees of freedom within groups (dfW): 701272
-  Mean Square Between (MSB): 513.079
-  Mean Square Within (MSW): 0.853048
-  F-statistic: 601.465
+  Number of groups: 8
+  Grand Mean: 0.000713203
+  SSB = 3591.55, SSW = 598218
+  dfB = 7, dfW = 701272
+  MSB = 513.079, MSW = 0.853048
+  F-statistic = 601.465
+(F < 2 suggests no significant differences; F > 2 suggests significant differences)
 
-Interpretation of ANOVA:
-  - F < 2 suggests no statistically significant differences among decades.
-  - F > 2 suggests that at least one decade's mean is significantly different.
-  (Exact p-values require an F-distribution lookup; here, F > 2 is used as a rough threshold.)
-
-Since the F-statistic exceeds the threshold, the Tukey HSD post-hoc test is performed
-to determine which specific decades differ significantly.
-
-Tukey HSD Post-hoc Test:
+Tukey HSD Post-hoc Test (Decadal Comparison)
   Harmonic mean of group sizes: 87660
-  Approximate critical difference: 0.00935852
+  Critical difference (approx): 0.00935852
+  Pairwise comparisons:
+    1940s vs 1950s: diff = 0.131215  --> Significant
+    1940s vs 1960s: diff = 0.114107  --> Significant
+    1940s vs 1970s: diff = 0.104755  --> Significant
+    1940s vs 1980s: diff = 0.0983205  --> Significant
+    1940s vs 1990s: diff = 0.215205  --> Significant
+    1940s vs 2000s: diff = 0.176977  --> Significant
+    1940s vs 2010s: diff = 0.243823  --> Significant
+    1950s vs 1960s: diff = 0.0171085  --> Significant
+    1950s vs 1970s: diff = 0.02646  --> Significant
+    1950s vs 1980s: diff = 0.0328946  --> Significant
+    1950s vs 1990s: diff = 0.0839895  --> Significant
+    1950s vs 2000s: diff = 0.0457621  --> Significant
+    1950s vs 2010s: diff = 0.112608  --> Significant
+    1960s vs 1970s: diff = 0.00935151  --> Not significant
+    1960s vs 1980s: diff = 0.0157861  --> Significant
+    1960s vs 1990s: diff = 0.101098  --> Significant
+    1960s vs 2000s: diff = 0.0628706  --> Significant
+    1960s vs 2010s: diff = 0.129717  --> Significant
+    1970s vs 1980s: diff = 0.0064346  --> Not significant
+    1970s vs 1990s: diff = 0.11045  --> Significant
+    1970s vs 2000s: diff = 0.0722221  --> Significant
+    1970s vs 2010s: diff = 0.139068  --> Significant
+    1980s vs 1990s: diff = 0.116884  --> Significant
+    1980s vs 2000s: diff = 0.0786567  --> Significant
+    1980s vs 2010s: diff = 0.145503  --> Significant
+    1990s vs 2000s: diff = 0.0382275  --> Significant
+    1990s vs 2010s: diff = 0.0286188  --> Significant
+    2000s vs 2010s: diff = 0.0668462  --> Significant
 
-Pairwise comparisons (difference in means):
-  1940s vs 1950s: difference = 0.131215  --> Significant difference
-  1940s vs 1960s: difference = 0.114107  --> Significant difference
-  1940s vs 1970s: difference = 0.104755  --> Significant difference
-  1940s vs 1980s: difference = 0.0983205  --> Significant difference
-  1940s vs 1990s: difference = 0.215205  --> Significant difference
-  1940s vs 2000s: difference = 0.176977  --> Significant difference
-  1940s vs 2010s: difference = 0.243823  --> Significant difference
-  1950s vs 1960s: difference = 0.0171085  --> Significant difference
-  1950s vs 1970s: difference = 0.02646  --> Significant difference
-  1950s vs 1980s: difference = 0.0328946  --> Significant difference
-  1950s vs 1990s: difference = 0.0839895  --> Significant difference
-  1950s vs 2000s: difference = 0.0457621  --> Significant difference
-  1950s vs 2010s: difference = 0.112608  --> Significant difference
-  1960s vs 1970s: difference = 0.00935151  --> Not significant
-  1960s vs 1980s: difference = 0.0157861  --> Significant difference
-  1960s vs 1990s: difference = 0.101098  --> Significant difference
-  1960s vs 2000s: difference = 0.0628706  --> Significant difference
-  1960s vs 2010s: difference = 0.129717  --> Significant difference
-  1970s vs 1980s: difference = 0.0064346  --> Not significant
-  1970s vs 1990s: difference = 0.11045  --> Significant difference
-  1970s vs 2000s: difference = 0.0722221  --> Significant difference
-  1970s vs 2010s: difference = 0.139068  --> Significant difference
-  1980s vs 1990s: difference = 0.116884  --> Significant difference
-  1980s vs 2000s: difference = 0.0786567  --> Significant difference
-  1980s vs 2010s: difference = 0.145503  --> Significant difference
-  1990s vs 2000s: difference = 0.0382275  --> Significant difference
-  1990s vs 2010s: difference = 0.0286188  --> Significant difference
-  2000s vs 2010s: difference = 0.0668462  --> Significant difference
 
-Final Detailed Conclusions:
-  Based on the comprehensive statistical analyses:
-    - The modified Mann-Kendall test, after adjusting for lag-1 autocorrelation, produced a Z value
-      exceeding 1.96, indicating a statistically significant overall increasing trend in deseasonalized SWH.
-    - Sen's slope, estimated at 0.076278 units per year, robustly quantifies the magnitude
-      of the upward trend.
-    - The One-Way ANOVA test yielded an F-statistic above the rough threshold (F > 2), and the subsequent
-      Tukey HSD post-hoc test identified that later full decades (e.g., 2000s, 2010s) have significantly higher
-      mean deseasonalized SWH than earlier decades (e.g., 1940s, 1950s).
-    - The ranking of full decades confirms the pattern: the most recent complete decades exhibit the highest
-      average deseasonalized wave heights, while the earlier decades show lower values.
+Seasonal Mann-Kendall Test (Monthly Statistics)
+------------------------------------------------
+  Month 1: Count = 63240, S = 36222430, Var = 28102397668033.3320, Z = 6.8329
+  Month 2: Count = 57648, S = 96810554, Var = 21287346275058.6680, Z = 20.9827
+  Month 3: Count = 63240, S = 131072994, Var = 28102397668033.3320, Z = 24.7253
+  Month 4: Count = 61200, S = 22298334, Var = 25469616223000.0000, Z = 4.4184
+  Month 5: Count = 63240, S = 83359532, Var = 28102397668033.3320, Z = 15.7247
+  Month 6: Count = 61200, S = 64176644, Var = 25469616223000.0000, Z = 12.7164
+  Month 7: Count = 63240, S = 93916638, Var = 28102397668033.3320, Z = 17.7162
+  Month 8: Count = 63240, S = 79621080, Var = 28102397668033.3320, Z = 15.0195
+  Month 9: Count = 61200, S = 48639654, Var = 25469616223000.0000, Z = 9.6378
+  Month 10: Count = 63240, S = 143960958, Var = 28102397668033.3320, Z = 27.1565
+  Month 11: Count = 61200, S = 142402450, Var = 25469616223000.0000, Z = 28.2167
+  Month 12: Count = 63240, S = 31231248, Var = 28102397668033.3320, Z = 5.8914
 
-Overall, the analysis provides robust and objective evidence that, after removing seasonal effects
-and adjusting for autocorrelation, significant wave heights have increased over time. This conclusion
-is supported by the statistically significant trend detected by the modified Mann-Kendall test, the
-positive trend magnitude indicated by Sen's slope, and the clear differences among full decades as revealed
-by ANOVA and the decade ranking.
+Combined Seasonal Mann-Kendall Test
+  Combined S value: 973712516
+  Combined Variance: 3.19883e+14
+  Overall Z value: 54.4422
+(|Z| > 1.96 indicates a significant seasonal trend at the 5% level)
+Ranking of Months by Average Deseasonalized SWH
+  Rank 1: Month 12 - Average SWH = 2.63105e-14
+  Rank 2: Month 3 - Average SWH = 2.11679e-14
+  Rank 3: Month 5 - Average SWH = 1.51618e-14
+  Rank 4: Month 9 - Average SWH = 1.48347e-14
+  Rank 5: Month 11 - Average SWH = 1.24909e-14
+  Rank 6: Month 2 - Average SWH = 6.1829e-15
+  Rank 7: Month 1 - Average SWH = 7.27242e-16
+  Rank 8: Month 4 - Average SWH = -4.47721e-16
+  Rank 9: Month 6 - Average SWH = -1.59159e-15
+  Rank 10: Month 10 - Average SWH = -7.22818e-15
+  Rank 11: Month 7 - Average SWH = -1.18285e-14
+  Rank 12: Month 8 - Average SWH = -1.82024e-14
+
+One-Way ANOVA for Monthly Deseasonalized SWH
+  Total data points: 745128
+  Number of groups (months): 12
+  Grand Mean = 4.77122e-15
+  SSB = 1.28217e-22, SSW = 637068
+  dfB = 11, dfW = 745116
+  MSB = 1.16561e-23, MSW = 0.854991
+  F-statistic = 1.3633e-23
+(F > 2 suggests significant differences among months)
+
+
+Monthly Decadal Analysis
+-------------------------
+Month 1:
+  Decade 1940s: Count = 7440, Mean = -0.0070, Std Dev = 1.2283
+  Decade 1950s: Count = 7440, Mean = -0.1792, Std Dev = 1.0356
+  Decade 1960s: Count = 7440, Mean = -0.1404, Std Dev = 1.0942
+  Decade 1970s: Count = 7440, Mean = 0.1740, Std Dev = 1.3499
+  Decade 1980s: Count = 7440, Mean = -0.0878, Std Dev = 1.1096
+  Decade 1990s: Count = 7440, Mean = 0.1866, Std Dev = 1.2876
+  Decade 2000s: Count = 7440, Mean = 0.1413, Std Dev = 1.2797
+  Decade 2010s: Count = 7440, Mean = 0.0425, Std Dev = 1.2464
+  One-Way ANOVA for Month 1:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = 0.0162
+    SSB = 1073.6578, SSW = 86894.3093
+    dfB = 7, dfW = 59512
+    MSB = 153.3797, MSW = 1.4601
+    F-statistic = 105.0464
+    (F > 2 suggests significant differences among decades)
+
+Month 2:
+  Decade 1940s: Count = 6792, Mean = -0.2995, Std Dev = 1.0775
+  Decade 1950s: Count = 6768, Mean = -0.0363, Std Dev = 1.2509
+  Decade 1960s: Count = 6792, Mean = -0.0519, Std Dev = 1.2225
+  Decade 1970s: Count = 6768, Mean = 0.2516, Std Dev = 1.3179
+  Decade 1980s: Count = 6792, Mean = -0.0762, Std Dev = 1.1976
+  Decade 1990s: Count = 6768, Mean = -0.0279, Std Dev = 1.1720
+  Decade 2000s: Count = 6792, Mean = -0.1696, Std Dev = 1.1316
+  Decade 2010s: Count = 6768, Mean = 0.3549, Std Dev = 1.3474
+  One-Way ANOVA for Month 2:
+    Total data points = 54240
+    Groups = 8
+    Grand Mean = -0.0071
+    SSB = 2154.7873, SSW = 80391.1559
+    dfB = 7, dfW = 54232
+    MSB = 307.8268, MSW = 1.4824
+    F-statistic = 207.6604
+    (F > 2 suggests significant differences among decades)
+
+Month 3:
+  Decade 1940s: Count = 7440, Mean = -0.3265, Std Dev = 0.9071
+  Decade 1950s: Count = 7440, Mean = 0.0042, Std Dev = 1.0236
+  Decade 1960s: Count = 7440, Mean = 0.0949, Std Dev = 1.0739
+  Decade 1970s: Count = 7440, Mean = 0.0151, Std Dev = 1.0498
+  Decade 1980s: Count = 7440, Mean = 0.0562, Std Dev = 0.9697
+  Decade 1990s: Count = 7440, Mean = -0.0383, Std Dev = 0.9815
+  Decade 2000s: Count = 7440, Mean = 0.0168, Std Dev = 1.0053
+  Decade 2010s: Count = 7440, Mean = 0.0799, Std Dev = 1.0614
+  One-Way ANOVA for Month 3:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = -0.0122
+    SSB = 937.1151, SSW = 60750.7316
+    dfB = 7, dfW = 59512
+    MSB = 133.8736, MSW = 1.0208
+    F-statistic = 131.1439
+    (F > 2 suggests significant differences among decades)
+
+Month 4:
+  Decade 1940s: Count = 7200, Mean = -0.0411, Std Dev = 0.7915
+  Decade 1950s: Count = 7200, Mean = -0.0035, Std Dev = 0.8249
+  Decade 1960s: Count = 7200, Mean = 0.0612, Std Dev = 0.8739
+  Decade 1970s: Count = 7200, Mean = -0.1553, Std Dev = 0.7362
+  Decade 1980s: Count = 7200, Mean = -0.1064, Std Dev = 0.8651
+  Decade 1990s: Count = 7200, Mean = 0.1762, Std Dev = 0.9353
+  Decade 2000s: Count = 7200, Mean = 0.0999, Std Dev = 0.8669
+  Decade 2010s: Count = 7200, Mean = 0.0866, Std Dev = 0.9257
+  One-Way ANOVA for Month 4:
+    Total data points = 57600
+    Groups = 8
+    Grand Mean = 0.0147
+    SSB = 631.1537, SSW = 42072.3793
+    dfB = 7, dfW = 57592
+    MSB = 90.1648, MSW = 0.7305
+    F-statistic = 123.4247
+    (F > 2 suggests significant differences among decades)
+
+Month 5:
+  Decade 1940s: Count = 7440, Mean = -0.1446, Std Dev = 0.7058
+  Decade 1950s: Count = 7440, Mean = -0.0287, Std Dev = 0.6777
+  Decade 1960s: Count = 7440, Mean = 0.0771, Std Dev = 0.7001
+  Decade 1970s: Count = 7440, Mean = 0.0547, Std Dev = 0.7460
+  Decade 1980s: Count = 7440, Mean = -0.0531, Std Dev = 0.7195
+  Decade 1990s: Count = 7440, Mean = -0.0163, Std Dev = 0.7199
+  Decade 2000s: Count = 7440, Mean = 0.0549, Std Dev = 0.7097
+  Decade 2010s: Count = 7440, Mean = 0.0845, Std Dev = 0.6460
+  One-Way ANOVA for Month 5:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = 0.0036
+    SSB = 325.8753, SSW = 29465.2498
+    dfB = 7, dfW = 59512
+    MSB = 46.5536, MSW = 0.4951
+    F-statistic = 94.0260
+    (F > 2 suggests significant differences among decades)
+
+Month 6:
+  Decade 1940s: Count = 7200, Mean = -0.0503, Std Dev = 0.5459
+  Decade 1950s: Count = 7200, Mean = -0.0134, Std Dev = 0.6264
+  Decade 1960s: Count = 7200, Mean = -0.0735, Std Dev = 0.5225
+  Decade 1970s: Count = 7200, Mean = -0.0467, Std Dev = 0.5844
+  Decade 1980s: Count = 7200, Mean = -0.0152, Std Dev = 0.5801
+  Decade 1990s: Count = 7200, Mean = 0.1381, Std Dev = 0.6172
+  Decade 2000s: Count = 7200, Mean = 0.0003, Std Dev = 0.5794
+  Decade 2010s: Count = 7200, Mean = 0.0637, Std Dev = 0.5859
+  One-Way ANOVA for Month 6:
+    Total data points = 57600
+    Groups = 8
+    Grand Mean = 0.0004
+    SSB = 242.2618, SSW = 19446.3894
+    dfB = 7, dfW = 57592
+    MSB = 34.6088, MSW = 0.3377
+    F-statistic = 102.4967
+    (F > 2 suggests significant differences among decades)
+
+Month 7:
+  Decade 1940s: Count = 7440, Mean = -0.0500, Std Dev = 0.5259
+  Decade 1950s: Count = 7440, Mean = 0.0149, Std Dev = 0.5646
+  Decade 1960s: Count = 7440, Mean = -0.0444, Std Dev = 0.5904
+  Decade 1970s: Count = 7440, Mean = -0.1016, Std Dev = 0.5612
+  Decade 1980s: Count = 7440, Mean = -0.0416, Std Dev = 0.5710
+  Decade 1990s: Count = 7440, Mean = 0.1132, Std Dev = 0.5268
+  Decade 2000s: Count = 7440, Mean = 0.0441, Std Dev = 0.5415
+  Decade 2010s: Count = 7440, Mean = 0.0848, Std Dev = 0.5413
+  One-Way ANOVA for Month 7:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = 0.0024
+    SSB = 287.6853, SSW = 18215.4435
+    dfB = 7, dfW = 59512
+    MSB = 41.0979, MSW = 0.3061
+    F-statistic = 134.2717
+    (F > 2 suggests significant differences among decades)
+
+Month 8:
+  Decade 1940s: Count = 7440, Mean = -0.0727, Std Dev = 0.5871
+  Decade 1950s: Count = 7440, Mean = 0.0538, Std Dev = 0.5851
+  Decade 1960s: Count = 7440, Mean = -0.0218, Std Dev = 0.5224
+  Decade 1970s: Count = 7440, Mean = -0.1214, Std Dev = 0.5487
+  Decade 1980s: Count = 7440, Mean = -0.0461, Std Dev = 0.5771
+  Decade 1990s: Count = 7440, Mean = 0.0757, Std Dev = 0.5607
+  Decade 2000s: Count = 7440, Mean = 0.0926, Std Dev = 0.5920
+  Decade 2010s: Count = 7440, Mean = 0.0392, Std Dev = 0.5364
+  One-Way ANOVA for Month 8:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = -0.0001
+    SSB = 307.7224, SSW = 18944.7106
+    dfB = 7, dfW = 59512
+    MSB = 43.9603, MSW = 0.3183
+    F-statistic = 138.0949
+    (F > 2 suggests significant differences among decades)
+
+Month 9:
+  Decade 1940s: Count = 7200, Mean = -0.0914, Std Dev = 0.6938
+  Decade 1950s: Count = 7200, Mean = 0.0531, Std Dev = 0.6965
+  Decade 1960s: Count = 7200, Mean = -0.0339, Std Dev = 0.6624
+  Decade 1970s: Count = 7200, Mean = -0.0657, Std Dev = 0.6633
+  Decade 1980s: Count = 7200, Mean = -0.0340, Std Dev = 0.7667
+  Decade 1990s: Count = 7200, Mean = 0.1604, Std Dev = 0.8335
+  Decade 2000s: Count = 7200, Mean = -0.0536, Std Dev = 0.7084
+  Decade 2010s: Count = 7200, Mean = 0.0973, Std Dev = 0.6320
+  One-Way ANOVA for Month 9:
+    Total data points = 57600
+    Groups = 8
+    Grand Mean = 0.0040
+    SSB = 401.1023, SSW = 29005.2195
+    dfB = 7, dfW = 57592
+    MSB = 57.3003, MSW = 0.5036
+    F-statistic = 113.7740
+    (F > 2 suggests significant differences among decades)
+
+Month 10:
+  Decade 1940s: Count = 7440, Mean = -0.2121, Std Dev = 0.8739
+  Decade 1950s: Count = 7440, Mean = -0.0924, Std Dev = 0.8392
+  Decade 1960s: Count = 7440, Mean = -0.0393, Std Dev = 0.8832
+  Decade 1970s: Count = 7440, Mean = -0.0924, Std Dev = 0.9106
+  Decade 1980s: Count = 7440, Mean = 0.0300, Std Dev = 0.9452
+  Decade 1990s: Count = 7440, Mean = 0.0795, Std Dev = 0.9633
+  Decade 2000s: Count = 7440, Mean = 0.1695, Std Dev = 0.9690
+  Decade 2010s: Count = 7440, Mean = 0.0697, Std Dev = 0.9500
+  One-Way ANOVA for Month 10:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = -0.0109
+    SSB = 769.9132, SSW = 50138.9819
+    dfB = 7, dfW = 59512
+    MSB = 109.9876, MSW = 0.8425
+    F-statistic = 130.5488
+    (F > 2 suggests significant differences among decades)
+
+Month 11:
+  Decade 1940s: Count = 7200, Mean = -0.2618, Std Dev = 0.8985
+  Decade 1950s: Count = 7200, Mean = -0.0151, Std Dev = 1.1146
+  Decade 1960s: Count = 7200, Mean = 0.0730, Std Dev = 1.0888
+  Decade 1970s: Count = 7200, Mean = -0.2379, Std Dev = 0.9331
+  Decade 1980s: Count = 7200, Mean = -0.1088, Std Dev = 1.0811
+  Decade 1990s: Count = 7200, Mean = 0.0816, Std Dev = 0.9936
+  Decade 2000s: Count = 7200, Mean = 0.1122, Std Dev = 1.2225
+  Decade 2010s: Count = 7200, Mean = 0.3149, Std Dev = 1.0670
+  One-Way ANOVA for Month 11:
+    Total data points = 57600
+    Groups = 8
+    Grand Mean = -0.0052
+    SSB = 1877.3257, SSW = 64033.4401
+    dfB = 7, dfW = 57592
+    MSB = 268.1894, MSW = 1.1118
+    F-statistic = 241.2109
+    (F > 2 suggests significant differences among decades)
+
+Month 12:
+  Decade 1940s: Count = 7440, Mean = -0.0722, Std Dev = 1.3283
+  Decade 1950s: Count = 7440, Mean = 0.1974, Std Dev = 1.3757
+  Decade 1960s: Count = 7440, Mean = -0.1489, Std Dev = 1.0659
+  Decade 1970s: Count = 7440, Mean = -0.0223, Std Dev = 1.3723
+  Decade 1980s: Count = 7440, Mean = 0.0376, Std Dev = 1.3184
+  Decade 1990s: Count = 7440, Mean = 0.0335, Std Dev = 1.1488
+  Decade 2000s: Count = 7440, Mean = -0.0215, Std Dev = 1.1484
+  Decade 2010s: Count = 7440, Mean = 0.0161, Std Dev = 1.1963
+  One-Way ANOVA for Month 12:
+    Total data points = 59520
+    Groups = 8
+    Grand Mean = 0.0025
+    SSB = 521.1438, SSW = 92871.7266
+    dfB = 7, dfW = 59512
+    MSB = 74.4491, MSW = 1.5606
+    F-statistic = 47.7068
+    (F > 2 suggests significant differences among decades)
+
+
+Final Detailed Conclusions
+--------------------------
+  - The modified Mann-Kendall test (with autocorrelation adjustment) produced a Z value > 1.96,
+    indicating a statistically significant overall increasing trend in deseasonalized SWH.
+  - Sen's slope, estimated at 0.0750203 units per year, robustly quantifies the upward trend.
+  - One-Way ANOVA for full decades showed that later decades have significantly higher average SWH
+    compared to earlier decades.
+  - The Seasonal Mann-Kendall test confirms significant trends on a monthly basis.
+  - Detailed monthly decadal analysis reveals that for many months, the evolution of SWH across decades
+    is statistically significant, reinforcing that the overall trend is robust and not driven solely
+    by a single season.
+
+Overall, the analysis provides robust, objective evidence that, after removing seasonal effects
+and adjusting for autocorrelation, significant wave heights have increased over time.
+These conclusions are supported by statistically significant trends, a positive Sen's slope, and clear
+differences observed in both decadal and monthly analyses.
 
 IMPORTANT NOTE:
-  Although these statistical methods provide objective evidence of trends and differences, they do not
-  establish causation. Further domain-specific investigation (e.g., changes in measurement techniques,
-  environmental conditions) is required for a comprehensive interpretation of the results.
+  Although these statistical methods provide objective evidence of trends and differences,
+  they do not establish causation. Further domain-specific analysis (e.g., changes in measurement
+  techniques or environmental conditions) is required for a comprehensive interpretation.
 
-End of Report.
+End of Report
