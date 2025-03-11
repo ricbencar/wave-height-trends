@@ -3,9 +3,8 @@
 ## Overall Description
 
 This program analyzes long-term trends in significant wave heights (SWH) using data from a CSV file (`input.csv`). To reduce methodological biases, advanced statistical techniques are applied, including adjustments for autocorrelation and seasonal variability. In addition to decadal trend analyses, the program performs a complete Seasonal Mann–Kendall test by splitting the deseasonalized data into 12 monthly series and then conducts a detailed monthly decadal analysis—grouping each month’s data by decade and testing for differences across decades.
-
-### Key Processing Steps
 ![wave-height-trends](https://github.com/user-attachments/assets/9f8322a2-1a37-42e2-bc74-b4fc6b400a78)
+### Key Processing Steps
 The key steps include:
 
 1. **CSV Data Reading and Parsing**:
