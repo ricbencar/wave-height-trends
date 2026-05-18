@@ -40,7 +40,7 @@ Mann-Kendall Trend Test (Modified):
 (|Z| > 1.96 indicates a significant trend at the 5% level)
 
 Sen's Slope Estimate (Overall):
-  Sen's slope for the overall deseasonalized series: 0.0750203 units per year
+  Sen's slope for the overall deseasonalized series: 0.0744048 units per year
 
 One-Way ANOVA (Decadal Comparison):
   Total data points: 701280
@@ -366,7 +366,7 @@ Final Detailed Conclusions
 --------------------------
   - The modified Mann-Kendall test (with autocorrelation adjustment) produced a Z value > 1.96,
     indicating a statistically significant overall increasing trend in deseasonalized SWH.
-  - Sen's slope, estimated at 0.0750203 units per year, robustly quantifies the upward trend.
+  - Sen's slope, estimated at 0.0744048 units per year, robustly quantifies the upward trend.
   - One-Way ANOVA for full decades showed that later decades have significantly higher average SWH
     compared to earlier decades.
   - The Seasonal Mann-Kendall test confirms significant trends on a monthly basis.

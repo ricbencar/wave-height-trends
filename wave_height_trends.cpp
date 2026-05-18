@@ -65,7 +65,7 @@
  *   the program minimizes biases and produces robust, evidence-based conclusions regarding long-term changes in wave heights.
  *
  * Compile with:
- *   g++ -O3 -fopenmp -Wall wave_height_trends.cpp -o wave_height_trends -static -static-libgcc -static-libstdc++
+ *   g++ -std=c++17 -O3 -fopenmp -Wall -Wextra -pedantic wave_height_trends.cpp -o wave_height_trends -static -static-libgcc -static-libstdc++
  *
  * Compilation Details (brief):
  *   -O3               : Maximum optimizations for speed.
@@ -86,6 +86,8 @@
 #include <cstdlib>    // For rand(), srand()
 #include <ctime>      // For time()
 #include <iomanip>    // For output formatting
+#include <unordered_map>
+#include <cctype>
 
 //============================================================================
 // Data Structures
@@ -104,6 +106,115 @@ struct DeseasData {
     int month;         // Month of measurement (1-12)
     double swh_deseas; // Deseasonalized SWH = raw SWH minus monthly mean
 };
+
+//============================================================================
+// CSV and Parsing Utilities
+//============================================================================
+
+std::string trim(const std::string& value) {
+    size_t first = 0;
+    while (first < value.size() && std::isspace(static_cast<unsigned char>(value[first]))) {
+        ++first;
+    }
+
+    size_t last = value.size();
+    while (last > first && std::isspace(static_cast<unsigned char>(value[last - 1]))) {
+        --last;
+    }
+
+    return value.substr(first, last - first);
+}
+
+std::string stripUtf8Bom(const std::string& value) {
+    if (value.size() >= 3 &&
+        static_cast<unsigned char>(value[0]) == 0xEF &&
+        static_cast<unsigned char>(value[1]) == 0xBB &&
+        static_cast<unsigned char>(value[2]) == 0xBF) {
+        return value.substr(3);
+    }
+    return value;
+}
+
+std::string toLowerAscii(std::string value) {
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+    return value;
+}
+
+std::vector<std::string> splitCsvLine(const std::string& line) {
+    std::vector<std::string> fields;
+    std::string field;
+    bool inQuotes = false;
+
+    for (size_t i = 0; i < line.size(); ++i) {
+        const char ch = line[i];
+        if (ch == '"') {
+            if (inQuotes && i + 1 < line.size() && line[i + 1] == '"') {
+                field.push_back('"');
+                ++i;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if (ch == ',' && !inQuotes) {
+            fields.push_back(trim(field));
+            field.clear();
+        } else {
+            field.push_back(ch);
+        }
+    }
+
+    fields.push_back(trim(field));
+    return fields;
+}
+
+std::unordered_map<std::string, size_t> buildHeaderIndex(const std::string& headerLine) {
+    std::vector<std::string> headers = splitCsvLine(stripUtf8Bom(headerLine));
+    std::unordered_map<std::string, size_t> index;
+
+    for (size_t i = 0; i < headers.size(); ++i) {
+        const std::string key = toLowerAscii(trim(headers[i]));
+        if (!key.empty()) {
+            index[key] = i;
+        }
+    }
+
+    return index;
+}
+
+bool parseDoubleValue(const std::string& text, double& value) {
+    const std::string s = trim(text);
+    if (s.empty()) {
+        return false;
+    }
+
+    try {
+        size_t pos = 0;
+        value = std::stod(s, &pos);
+        while (pos < s.size() && std::isspace(static_cast<unsigned char>(s[pos]))) {
+            ++pos;
+        }
+        return pos == s.size() && std::isfinite(value);
+    } catch (...) {
+        return false;
+    }
+}
+
+bool parseYearMonth(const std::string& datetime, int& year, int& month) {
+    const std::string s = trim(datetime);
+    if (s.size() < 7) {
+        return false;
+    }
+
+    try {
+        year = std::stoi(s.substr(0, 4));
+        month = std::stoi(s.substr(5, 2));
+    } catch (...) {
+        return false;
+    }
+
+    return year > 0 && month >= 1 && month <= 12;
+}
 
 //============================================================================
 // Basic Statistical Functions
@@ -379,6 +490,7 @@ void seasonalMannKendallTest(const std::vector<DeseasData>& deseasonData, std::o
 // Tests whether the mean deseasonalized SWH differs among full decades.
 // If F > 2, performs a Tukey HSD post-hoc test for pairwise decadal comparisons.
 void tukeyHSD_decades(const std::vector<std::vector<double>> &groups, double MSW, int dfW, int startDecade, std::ostream &out) {
+    (void)dfW;
     std::vector<double> groupMeans;
     std::vector<int> groupSizes;
     for (const auto &g : groups) {
@@ -490,45 +602,67 @@ int main() {
         std::cerr << "Error opening input.csv\n";
         return 1;
     }
-    std::vector<std::string> lines;
-    std::string line;
-    while (std::getline(fin, line)) {
-        if (!line.empty())
-            lines.push_back(line);
-    }
-    fin.close();
-    if (lines.empty()) {
+
+    std::string headerLine;
+    if (!std::getline(fin, headerLine)) {
         std::cerr << "CSV file is empty.\n";
         return 1;
     }
-    // Remove header.
-    lines.erase(lines.begin());
-    
-    // Step 2: Parse CSV lines into DataPoint structures.
-    std::vector<DataPoint> allData;
-    for (const auto &l : lines) {
-        std::istringstream ss(l);
-        std::string datetime, swhStr, dummy;
-        if (!std::getline(ss, datetime, ',')) continue;
-        if (!std::getline(ss, swhStr, ',')) continue;
-        for (int i = 0; i < 4; i++) {
-            std::getline(ss, dummy, ',');
-        }
-        if (datetime.size() < 10) continue;
-        try {
-            int year = std::stoi(datetime.substr(0, 4));
-            int month = std::stoi(datetime.substr(5, 2));
-            double swh = std::stod(swhStr);
-            allData.push_back({year, month, swh});
-        } catch (...) {
-            continue;
-        }
-    }
-    if (allData.empty()) {
-        std::cerr << "No valid data parsed from CSV.\n";
+
+    const std::unordered_map<std::string, size_t> headerIndex = buildHeaderIndex(headerLine);
+    const auto datetimeIt = headerIndex.find("datetime");
+    const auto swhIt = headerIndex.find("swh");
+
+    if (datetimeIt == headerIndex.end() || swhIt == headerIndex.end()) {
+        std::cerr << "CSV header must contain at least these columns: datetime,swh\n";
         return 1;
     }
-    
+
+    const size_t datetimeCol = datetimeIt->second;
+    const size_t swhCol = swhIt->second;
+    const size_t requiredCol = std::max(datetimeCol, swhCol);
+
+    // Step 2: Parse CSV lines into DataPoint structures.
+    std::vector<DataPoint> allData;
+    std::string line;
+    size_t totalRows = 0;
+    size_t skippedRows = 0;
+
+    while (std::getline(fin, line)) {
+        if (trim(line).empty()) {
+            continue;
+        }
+
+        ++totalRows;
+        const std::vector<std::string> fields = splitCsvLine(line);
+        if (fields.size() <= requiredCol) {
+            ++skippedRows;
+            continue;
+        }
+
+        int year = 0;
+        int month = 0;
+        double swh = 0.0;
+
+        if (!parseYearMonth(fields[datetimeCol], year, month) ||
+            !parseDoubleValue(fields[swhCol], swh)) {
+            ++skippedRows;
+            continue;
+        }
+
+        allData.push_back({year, month, swh});
+    }
+    fin.close();
+
+    if (allData.empty()) {
+        std::cerr << "No valid data parsed from CSV. Required usable columns: datetime and swh.\n";
+        return 1;
+    }
+
+    if (skippedRows > 0) {
+        std::cout << "Warning: skipped " << skippedRows << " invalid row(s) out of " << totalRows << ".\n";
+    }
+
     // Step 3: Sort data chronologically.
     std::sort(allData.begin(), allData.end(), [](const DataPoint &a, const DataPoint &b) {
         return (a.year == b.year) ? (a.month < b.month) : (a.year < b.year);
